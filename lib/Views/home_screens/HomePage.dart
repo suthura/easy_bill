@@ -1,3 +1,4 @@
+import 'package:easy_bill/Views/home_screens/Common/FloatingButton.dart';
 import 'package:easy_bill/Views/home_screens/Returns/AddReturn.dart';
 import 'package:easy_bill/Views/home_screens/Returns/ViewReturns.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/AddItem.dart';
@@ -18,24 +19,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Container(
-            // color: Colors.amber,
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-                tooltip: "New Sale",
-                icon: Icon(
-                  FontAwesomeIcons.plusCircle,
-                  color: Colors.black,
-                ),
-                onPressed: null),
-          ],
-        )),
-      ),
+      floatingActionButton: floatingButton(context),
       appBar: appBar(),
       body: SingleChildScrollView(
         child: Column(

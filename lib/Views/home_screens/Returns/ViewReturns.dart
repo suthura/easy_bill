@@ -5,6 +5,7 @@ import 'package:easy_bill/Controllers/API_Controllers/Stock/RemoveItemService.da
 import 'package:easy_bill/Controllers/API_Controllers/Stock/UpdateItemService.dart';
 import 'package:easy_bill/Modals/ReturnItem.dart';
 import 'package:easy_bill/Modals/StockItem.dart';
+import 'package:easy_bill/Views/home_screens/Common/FloatingButton.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -44,24 +45,7 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Container(
-            // color: Colors.amber,
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-                tooltip: "New Sale",
-                icon: Icon(
-                  FontAwesomeIcons.plusCircle,
-                  color: Colors.black,
-                ),
-                onPressed: null),
-          ],
-        )),
-      ),
+      floatingActionButton: floatingButton(context),
       appBar: appBar(),
       body: Container(
         child: Padding(

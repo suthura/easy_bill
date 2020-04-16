@@ -43,25 +43,6 @@ class _AvailableListPageState extends State<AvailableListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Container(
-            // color: Colors.amber,
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-                tooltip: "New Sale",
-                icon: Icon(
-                  FontAwesomeIcons.plusCircle,
-                  color: Colors.black,
-                ),
-                onPressed: null),
-          ],
-        )),
-      ),
       appBar: appBar(),
       body: Container(
         child: Padding(
@@ -74,69 +55,14 @@ class _AvailableListPageState extends State<AvailableListPage> {
                 height: 30,
               ),
               Expanded(
-                child: ListView.separated(
+                child: GridView.builder(
+                    padding: const EdgeInsets.all(4.0),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2),
+                    itemCount: filteredReturnItem.length,
                     itemBuilder: (context, index) {
-                      // print(widget.filteredSaleItem.length);
-
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width * 3 / 5,
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text(filteredReturnItem[index].name),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(filteredReturnItem[index].description),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      filteredReturnItem[index].returnDate,
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () {
-                                    final body = {
-                                      "returnID": filteredReturnItem[index].returnID
-                                    };
-                                    print(body);
-
-                                    RemoveReturnService.removeReturn(body)
-                                        .then((success) {
-                                      if (success) {
-                                        print("deleted");
-                                        callAPI();
-                                        // Navigator.of(context).pop();
-                                      } else {
-                                        print("failed");
-                                      }
-                                    });
-                                  })
-                            ],
-                          )
-                        ],
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(height: 16);
-                    },
-                    itemCount: filteredReturnItem.length),
+                      return Text("card");
+                    }),
               )
             ],
           ),

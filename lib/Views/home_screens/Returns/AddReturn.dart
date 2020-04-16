@@ -1,4 +1,5 @@
 import 'package:easy_bill/Controllers/API_Controllers/Returns/AddReturnService.dart';
+import 'package:easy_bill/Views/home_screens/Common/FloatingButton.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/AddItemService.dart';
@@ -51,24 +52,7 @@ class _AddReturnPageState extends State<AddReturnPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: null,
-        child: Container(
-            // color: Colors.amber,
-            child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-                tooltip: "New Sale",
-                icon: Icon(
-                  FontAwesomeIcons.plusCircle,
-                  color: Colors.black,
-                ),
-                onPressed: null),
-          ],
-        )),
-      ),
+      floatingActionButton: floatingButton(context),
       appBar: appBar(),
       body: SingleChildScrollView(
         child: Padding(
