@@ -1,3 +1,5 @@
+import 'package:easy_bill/Views/home_screens/Returns/AddReturn.dart';
+import 'package:easy_bill/Views/home_screens/Returns/ViewReturns.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/AddItem.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/ViewItems.dart';
 import 'package:flutter/material.dart';
@@ -116,28 +118,42 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(FontAwesomeIcons.chevronCircleDown),
                   itemBuilder: (context) => [
                         PopupMenuItem(
-                            child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.add_circle,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("Add Return")
-                          ],
+                            child: InkWell(
+                          onTap: () {
+                            print("add return");
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => AddReturnPage()));
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.add_circle,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("Add Return")
+                            ],
+                          ),
                         )),
                         PopupMenuItem(
-                            child: Row(
-                          children: <Widget>[
-                            Icon(
-                              Icons.assignment,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("View Returns")
-                          ],
+                            child: InkWell(
+                          onTap: () {
+                            print("view return");
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewReturnsPage()));
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.assignment,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("View Returns")
+                            ],
+                          ),
                         ))
                       ]),
             ),

@@ -1,4 +1,6 @@
 import 'package:easy_bill/Controllers/API_Controllers/Stock/GetMyStockService.dart';
+import 'package:easy_bill/Controllers/API_Controllers/Stock/RemoveItemService.dart';
+import 'package:easy_bill/Controllers/API_Controllers/Stock/UpdateItemService.dart';
 import 'package:easy_bill/Modals/StockItem.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
@@ -22,6 +24,14 @@ class _ViewItemPageState extends State<ViewItemPage> {
     callAPI();
     super.initState();
   }
+
+  final nameController = TextEditingController();
+  final priceController = TextEditingController();
+  final descriptionController = TextEditingController();
+  final stockController = TextEditingController();
+  final stockIDController = TextEditingController();
+
+  StockItem selectedItem;
 
   callAPI() {
     GetMyStockService.getStock().then((stockItemFromServer) {
@@ -90,8 +100,7 @@ class _ViewItemPageState extends State<ViewItemPage> {
                                 ),
                                 Row(
                                   children: <Widget>[
-                                    Text("Rs: " +
-                                        filteredStockItem[index].price),
+                                    Text(filteredStockItem[index].description),
                                   ],
                                 ),
                                 Row(
@@ -113,44 +122,305 @@ class _ViewItemPageState extends State<ViewItemPage> {
                               IconButton(
                                   icon: Icon(Icons.edit),
                                   onPressed: () {
+                                    nameController.text =
+                                        filteredStockItem[index].name;
+                                    priceController.text =
+                                        filteredStockItem[index].price;
+                                    descriptionController.text =
+                                        filteredStockItem[index].description;
+                                    stockController.text =
+                                        filteredStockItem[index]
+                                            .stock
+                                            .toString();
+                                    stockIDController.text =
+                                        filteredStockItem[index].itemID;
                                     showDialog(
                                         context: context,
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             content: Form(
                                               key: _formKey,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: Text(
-                                                      filteredStockItem[index].name
-                                                    ),
+                                              child: Expanded(
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: <Widget>[
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(8.0),
+                                                        child: Text("Edit"),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: TextFormField(
+                                                          controller:
+                                                              nameController,
+                                                          decoration:
+                                                              new InputDecoration(
+                                                            labelText:
+                                                                "Item Name",
+                                                            fillColor:
+                                                                Colors.white,
+                                                            border:
+                                                                new OutlineInputBorder(
+                                                              borderRadius:
+                                                                  new BorderRadius
+                                                                          .circular(
+                                                                      25.0),
+                                                              borderSide:
+                                                                  new BorderSide(),
+                                                            ),
+                                                            //fillColor: Colors.green
+                                                          ),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .text,
+                                                          style: new TextStyle(
+                                                            fontFamily:
+                                                                "Poppins",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: TextFormField(
+                                                          controller:
+                                                              priceController,
+                                                          decoration:
+                                                              new InputDecoration(
+                                                            labelText:
+                                                                "Item Price",
+                                                            fillColor:
+                                                                Colors.white,
+                                                            border:
+                                                                new OutlineInputBorder(
+                                                              borderRadius:
+                                                                  new BorderRadius
+                                                                          .circular(
+                                                                      25.0),
+                                                              borderSide:
+                                                                  new BorderSide(),
+                                                            ),
+                                                            //fillColor: Colors.green
+                                                          ),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .text,
+                                                          style: new TextStyle(
+                                                            fontFamily:
+                                                                "Poppins",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: TextFormField(
+                                                          controller:
+                                                              descriptionController,
+                                                          decoration:
+                                                              new InputDecoration(
+                                                            labelText:
+                                                                "Item Description",
+                                                            fillColor:
+                                                                Colors.white,
+                                                            border:
+                                                                new OutlineInputBorder(
+                                                              borderRadius:
+                                                                  new BorderRadius
+                                                                          .circular(
+                                                                      25.0),
+                                                              borderSide:
+                                                                  new BorderSide(),
+                                                            ),
+                                                            //fillColor: Colors.green
+                                                          ),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .text,
+                                                          style: new TextStyle(
+                                                            fontFamily:
+                                                                "Poppins",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.all(4.0),
+                                                        child: TextFormField(
+                                                          controller:
+                                                              stockController,
+                                                          decoration:
+                                                              new InputDecoration(
+                                                            labelText:
+                                                                "Available Stock",
+                                                            fillColor:
+                                                                Colors.white,
+                                                            border:
+                                                                new OutlineInputBorder(
+                                                              borderRadius:
+                                                                  new BorderRadius
+                                                                          .circular(
+                                                                      25.0),
+                                                              borderSide:
+                                                                  new BorderSide(),
+                                                            ),
+                                                            //fillColor: Colors.green
+                                                          ),
+                                                          keyboardType:
+                                                              TextInputType
+                                                                  .text,
+                                                          style: new TextStyle(
+                                                            fontFamily:
+                                                                "Poppins",
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .all(8.0),
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceBetween,
+                                                            children: <Widget>[
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  final body = {
+                                                                    "itemid":
+                                                                        stockIDController
+                                                                            .text
+                                                                  };
+
+                                                                  RemoveItemService
+                                                                          .removeItem(
+                                                                              body)
+                                                                      .then(
+                                                                          (success) {
+                                                                    if (success) {
+                                                                      print(
+                                                                          "saved");
+                                                                      callAPI();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    } else {
+                                                                      print(
+                                                                          "failed");
+                                                                    }
+                                                                  });
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  height: 40,
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .red,
+                                                                    borderRadius:
+                                                                        new BorderRadius.circular(
+                                                                            25.0),
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        style: BorderStyle
+                                                                            .solid,
+                                                                        width:
+                                                                            0.80),
+                                                                  ),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            20.0,
+                                                                        top:
+                                                                            10),
+                                                                    child: Text(
+                                                                        "Delete"),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              InkWell(
+                                                                onTap: () {
+                                                                  final body = {
+                                                                    "name":
+                                                                        nameController
+                                                                            .text,
+                                                                    "price":
+                                                                        priceController
+                                                                            .text,
+                                                                    "description":
+                                                                        descriptionController
+                                                                            .text,
+                                                                    "stock":
+                                                                        stockController
+                                                                            .text,
+                                                                    "itemid":
+                                                                        stockIDController
+                                                                            .text
+                                                                  };
+
+                                                                  UpdateItemService
+                                                                          .updateItem(
+                                                                              body)
+                                                                      .then(
+                                                                          (success) {
+                                                                    if (success) {
+                                                                      print(
+                                                                          "saved");
+                                                                      callAPI();
+                                                                      Navigator.of(
+                                                                              context)
+                                                                          .pop();
+                                                                    } else {
+                                                                      print(
+                                                                          "failed");
+                                                                    }
+                                                                  });
+                                                                },
+                                                                child:
+                                                                    Container(
+                                                                  height: 40,
+                                                                  width: 100,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: Colors
+                                                                        .greenAccent,
+                                                                    borderRadius:
+                                                                        new BorderRadius.circular(
+                                                                            25.0),
+                                                                    border: Border.all(
+                                                                        color: Colors
+                                                                            .grey,
+                                                                        style: BorderStyle
+                                                                            .solid,
+                                                                        width:
+                                                                            0.80),
+                                                                  ),
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        left:
+                                                                            20.0,
+                                                                        top:
+                                                                            10),
+                                                                    child: Text(
+                                                                        "Update"),
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            ],
+                                                          ))
+                                                    ],
                                                   ),
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsets.all(8.0),
-                                                    child: TextFormField(),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            8.0),
-                                                    child: RaisedButton(
-                                                      child: Text("Submitß"),
-                                                      onPressed: () {
-                                                        if (_formKey
-                                                            .currentState
-                                                            .validate()) {
-                                                          _formKey.currentState
-                                                              .save();
-                                                        }
-                                                      },
-                                                    ),
-                                                  )
-                                                ],
+                                                ),
                                               ),
                                             ),
                                           );
