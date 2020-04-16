@@ -4,9 +4,15 @@ class StockItem {
   String price;
   String description;
   int stock;
+  int cart;
 
   StockItem(
-      {this.itemID, this.name, this.price, this.description, this.stock});
+      {this.itemID,
+      this.name,
+      this.price,
+      this.description,
+      this.stock,
+      this.cart});
 
   factory StockItem.fromJson(Map<String, dynamic> json) {
     return StockItem(
@@ -14,6 +20,7 @@ class StockItem {
         name: json["name"] as String,
         price: json["price"] as String,
         description: json["description"] as String,
-        stock: json["stock"] as int);
+        stock: json["stock"] as int,
+        cart: 0);
   }
 }

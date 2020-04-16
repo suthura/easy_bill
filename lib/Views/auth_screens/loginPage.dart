@@ -49,8 +49,8 @@ class _LoginPageState extends State<LoginPage> {
     return InkWell(
       onTap: () {
         final body = {
-          "email": emailController.text,
-          "password": passwordController.text,
+          "email": emailController.text.trim(),
+          "password": passwordController.text.trim(),
         };
 
         // print(body);

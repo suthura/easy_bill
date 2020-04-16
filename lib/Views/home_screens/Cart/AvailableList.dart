@@ -16,8 +16,10 @@ class AvailableListPage extends StatefulWidget {
   _AvailableListPageState createState() => _AvailableListPageState();
 }
 
-List<ReturnItem> returnItem = List();
-List<ReturnItem> filteredReturnItem = List();
+List<StockItem> stockItem = List();
+List<StockItem> filteredStockItem = List();
+
+List<StockItem> _cartList = List();
 
 class _AvailableListPageState extends State<AvailableListPage> {
   final _formKey = GlobalKey<FormState>();
@@ -31,10 +33,10 @@ class _AvailableListPageState extends State<AvailableListPage> {
   ReturnItem selectedItem;
 
   callAPI() {
-    GetMyReturnsService.getRturns().then((returnItemFromServer) {
+    GetMyStockService.getStock().then((stockItemFromServer) {
       setState(() {
-        returnItem = returnItemFromServer;
-        filteredReturnItem = returnItem;
+        stockItem = stockItemFromServer;
+        filteredStockItem = stockItem;
         print("Item list updated");
       });
     });
@@ -59,9 +61,84 @@ class _AvailableListPageState extends State<AvailableListPage> {
                     padding: const EdgeInsets.all(4.0),
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2),
-                    itemCount: filteredReturnItem.length,
+                    itemCount: filteredStockItem.length,
                     itemBuilder: (context, index) {
-                      return Text("card");
+                      return Card(
+                          elevation: 4.0,
+                          child: Stack(
+                            fit: StackFit.loose,
+                            alignment: Alignment.center,
+                            children: <Widget>[
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  // Icon(Icons.add_comment),
+                                  Text(
+                                    filteredStockItem[index].name,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.subhead,
+                                  ),
+                                  Text(
+                                    filteredStockItem[index].description,
+                                    textAlign: TextAlign.center,
+                                    style: Theme.of(context).textTheme.subhead,
+                                  )
+                                ],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                  right: 8.0,
+                                  bottom: 8.0,
+                                ),
+                                child: Align(
+                                  alignment: Alignment.bottomRight,
+                                  // child: GestureDetector(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                    children: <Widget>[
+                                      Icon(
+                                        Icons.remove_circle,
+                                        color: Colors.red,
+                                      ),
+                                      Text(_cartList[index].cart.toString()),
+                                      IconButton(
+                                        onPressed: () {
+                                          if (_cartList.contains(
+                                              filteredStockItem[index])) {
+                                            setState(() {
+                                              _cartList[index].cart+=1;
+                                            });
+                                            print(_cartList[index].cart);
+                                          } else {
+                                            setState(() {
+                                              _cartList
+                                                .add(filteredStockItem[index]);
+                                            });
+                                          }
+                                        },
+                                        icon: Icon(Icons.add_circle),
+                                        color: Colors.green,
+                                      )
+                                      
+                                      
+                                    ],
+                                  ),
+                                  // onTap: () {
+                                  // setState(() {
+                                  //   if (_cartList
+                                  //       .contains(filteredStockItem[index]))
+                                  //     _cartList
+                                  //         .remove(filteredStockItem[index]);
+                                  //   else
+                                  //     _cartList
+                                  //         .add(filteredStockItem[index]);
+                                  // });
+                                  // },
+                                  // ),
+                                ),
+                              ),
+                            ],
+                          ));
                     }),
               )
             ],
