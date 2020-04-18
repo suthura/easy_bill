@@ -155,7 +155,7 @@ class _AddItemPageState extends State<AddItemPage> {
                       AddItemService.addItem(body).then((success) {
                         if (success) {
                           print("saved");
-                          clearContollers();
+                          // clearContollers();
                         } else {
                           print("failed");
                         }
