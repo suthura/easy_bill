@@ -1,5 +1,6 @@
 import 'package:easy_bill/Controllers/API_Controllers/Returns/GetMyReturnsService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Returns/RemoveReturnService.dart';
+import 'package:easy_bill/Controllers/API_Controllers/Sales/AddNewSaleService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/GetMyStockService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/RemoveItemService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/UpdateItemService.dart';
@@ -127,6 +128,16 @@ class _AvailableListPageState extends State<AvailableListPage> {
                         "total": total,
                         "saletime": now.toString()
                       };
+
+                      AddNewSaleService.newSale(salesList).then((success) {
+                        if (success) {
+                          print("Sale Success");
+                          callAPI();
+                          // clearContollers();
+                        } else {
+                          print("failed");
+                        }
+                      });
 
                       print(salesList);
                       // initState();
