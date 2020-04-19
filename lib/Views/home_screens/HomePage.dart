@@ -3,6 +3,7 @@ import 'package:easy_bill/Views/home_screens/Returns/AddReturn.dart';
 import 'package:easy_bill/Views/home_screens/Returns/ViewReturns.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/AddItem.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/ViewItems.dart';
+import 'package:easy_bill/Views/home_screens/Sales/ViewAllSales.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -82,16 +83,23 @@ class _HomePageState extends State<HomePage> {
                   icon: Icon(FontAwesomeIcons.chevronCircleDown),
                   itemBuilder: (context) => [
                         PopupMenuItem(
-                            child: Row(
-                          children: <Widget>[
-                            Icon(
-                              FontAwesomeIcons.solidArrowAltCircleRight,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text("View Sales")
-                          ],
+                            child: InkWell(
+                          onTap: () {
+                            print("view all sales");
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewAllSalesPage()));
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                FontAwesomeIcons.solidArrowAltCircleRight,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("View Sales")
+                            ],
+                          ),
                         )),
                       ]),
             ),
