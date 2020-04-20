@@ -61,6 +61,10 @@ class _AddReturnPageState extends State<AddReturnPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+               Text(
+                "ADD RETURN",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
               SizedBox(
                 height: 30,
               ),

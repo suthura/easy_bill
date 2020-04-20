@@ -54,6 +54,10 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+               Text(
+                "VIEW RETURNS",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
               SizedBox(
                 height: 30,
               ),

@@ -1,6 +1,8 @@
 import 'package:easy_bill/Views/home_screens/Common/FloatingButton.dart';
 import 'package:easy_bill/Views/home_screens/Returns/AddReturn.dart';
 import 'package:easy_bill/Views/home_screens/Returns/ViewReturns.dart';
+import 'package:easy_bill/Views/home_screens/Sales/ViewMonthlySales.dart';
+import 'package:easy_bill/Views/home_screens/Sales/ViewWeeklySales.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/AddItem.dart';
 import 'package:easy_bill/Views/home_screens/Stocks/ViewItems.dart';
 import 'package:easy_bill/Views/home_screens/Sales/ViewAllSales.dart';
@@ -27,8 +29,12 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text("HOME",style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w500
+            ),),
             SizedBox(
-              height: 30,
+              height: 10,
             ),
             _buildCard(
               "Stocks",
@@ -98,6 +104,44 @@ class _HomePageState extends State<HomePage> {
                                 width: 10,
                               ),
                               Text("View Sales")
+                            ],
+                          ),
+                        )),
+                        PopupMenuItem(
+                            child: InkWell(
+                          onTap: () {
+                            print("view week sales");
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewWeeklylSalesPage()));
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                FontAwesomeIcons.solidArrowAltCircleRight,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("View Last Week Sales")
+                            ],
+                          ),
+                        )),
+                        PopupMenuItem(
+                            child: InkWell(
+                          onTap: () {
+                            print("view month sales");
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: (context) => ViewMonthlylSalesPage()));
+                          },
+                          child: Row(
+                            children: <Widget>[
+                              Icon(
+                                FontAwesomeIcons.solidArrowAltCircleRight,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Text("View Last Month Sales")
                             ],
                           ),
                         )),

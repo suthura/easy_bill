@@ -156,6 +156,10 @@ class _AvailableListPageState extends State<AvailableListPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+               Text(
+                "NEW BILL",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
               SizedBox(
                 height: 30,
               ),

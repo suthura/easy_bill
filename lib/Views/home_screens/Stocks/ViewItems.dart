@@ -57,6 +57,10 @@ class _ViewItemPageState extends State<ViewItemPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+               Text(
+                "VIEW ITEMS",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
               SizedBox(
                 height: 30,
               ),

@@ -37,6 +37,10 @@ class _AddItemPageState extends State<AddItemPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              Text(
+                "ADD ITEM",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
               SizedBox(
                 height: 30,
               ),
@@ -149,13 +153,14 @@ class _AddItemPageState extends State<AddItemPage> {
                         "price": priceController.text,
                         "description": descriptionController.text,
                         "stock": stockController.text,
-                        "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTkzMWU0NjYxYzVjMDAwMTcwYmNkYzUiLCJpYXQiOjE1ODY4NjU5MDB9.5rMJBsgdlMQZVqoFPU3iCHoLm44gn7v_HPPDc90F1DA"
+                        "token":
+                            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTkzMWU0NjYxYzVjMDAwMTcwYmNkYzUiLCJpYXQiOjE1ODY4NjU5MDB9.5rMJBsgdlMQZVqoFPU3iCHoLm44gn7v_HPPDc90F1DA"
                       };
 
                       AddItemService.addItem(body).then((success) {
                         if (success) {
                           print("saved");
-                          // clearContollers();
+                          clearContollers();
                         } else {
                           print("failed");
                         }

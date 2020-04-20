@@ -1,5 +1,8 @@
 import 'package:easy_bill/Controllers/API_Controllers/Sales/GetAllSalesService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Returns/RemoveReturnService.dart';
+import 'package:easy_bill/Controllers/API_Controllers/Sales/GetMonthlySalesService.dart';
+
+import 'package:easy_bill/Controllers/API_Controllers/Sales/GetWeeklySalesService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/GetMyStockService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/RemoveItemService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/UpdateItemService.dart';
@@ -11,17 +14,17 @@ import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 
-class ViewAllSalesPage extends StatefulWidget {
-  ViewAllSalesPage({Key key}) : super(key: key);
+class ViewMonthlylSalesPage extends StatefulWidget {
+  ViewMonthlylSalesPage({Key key}) : super(key: key);
 
   @override
-  _ViewAllSalesPageState createState() => _ViewAllSalesPageState();
+  _ViewMonthlylSalesPageState createState() => _ViewMonthlylSalesPageState();
 }
 
 List<SaleItem> saleItem = List();
 List<SaleItem> filteredSaleItem = List();
 
-class _ViewAllSalesPageState extends State<ViewAllSalesPage> {
+class _ViewMonthlylSalesPageState extends State<ViewMonthlylSalesPage> {
   final _formKey = GlobalKey<FormState>();
   var formatter = new DateFormat('yyyy-MM-dd kk:mm:ss');
   @override
@@ -33,7 +36,7 @@ class _ViewAllSalesPageState extends State<ViewAllSalesPage> {
   SaleItem selectedItem;
 
   callAPI() {
-    GetAllSalesService.getAllSales().then((saleItemFromServer) {
+    GetMonthlySalesService.getSales().then((saleItemFromServer) {
       setState(() {
         saleItem = saleItemFromServer;
         filteredSaleItem = saleItem;
@@ -56,7 +59,7 @@ class _ViewAllSalesPageState extends State<ViewAllSalesPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
                Text(
-                "ALL SALES",
+                "MONTHLY SALES",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
               SizedBox(
