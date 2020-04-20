@@ -1,8 +1,10 @@
+import 'package:easy_bill/Views/auth_screens/loginPage.dart';
 import 'package:easy_bill/Views/home_screens/Common/FloatingButton.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/AddItemService.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddItemPage extends StatefulWidget {
@@ -11,6 +13,8 @@ class AddItemPage extends StatefulWidget {
   @override
   _AddItemPageState createState() => _AddItemPageState();
 }
+
+bool isLoading = false;
 
 clearContollers() {
   nameController.clear();
@@ -122,70 +126,156 @@ class _AddItemPageState extends State<AddItemPage> {
               SizedBox(
                 height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      // Navigator.of(context).pop();
-                      clearContollers();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: new BorderRadius.circular(25.0),
-                        border: Border.all(
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
-                            width: 0.80),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0, top: 10),
-                        child: Text("Clear"),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      SharedPreferences login = await SharedPreferences.getInstance();
-                      final body = {
-                        "name": nameController.text,
-                        "price": priceController.text,
-                        "description": descriptionController.text,
-                        "stock": stockController.text,
-                        "token": login.getString("gettoken")
-                      };
+              isLoading
+                  ? LinearProgressIndicator()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            // Navigator.of(context).pop();
+                            clearContollers();
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: new BorderRadius.circular(25.0),
+                              border: Border.all(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 0.80),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 35.0, top: 10),
+                              child: Text("Clear"),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
 
-                      AddItemService.addItem(body).then((success) {
-                        if (success) {
-                          print("saved");
-                          clearContollers();
-                        } else {
-                          print("failed");
-                        }
-                      });
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.greenAccent,
-                        borderRadius: new BorderRadius.circular(25.0),
-                        border: Border.all(
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
-                            width: 0.80),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0, top: 10),
-                        child: Text("Save"),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                            SharedPreferences login =
+                                await SharedPreferences.getInstance();
+                            final body = {
+                              "name": nameController.text,
+                              "price": priceController.text,
+                              "description": descriptionController.text,
+                              "stock": stockController.text,
+                              "token": login.getString("gettoken")
+                            };
+
+                            AddItemService.addItem(body).then((success) {
+                              if (success) {
+                                print("saved");
+                                clearContollers();
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Alert(
+                                  style: AlertStyle(
+                                    animationType: AnimationType.fromTop,
+                                    isCloseButton: false,
+                                    isOverlayTapDismiss: false,
+                                    descStyle:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    animationDuration:
+                                        Duration(milliseconds: 400),
+                                    alertBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0.0),
+                                      side: BorderSide(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    titleStyle: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  context: context,
+                                  type: AlertType.success,
+                                  title: "Item Added",
+                                  desc: "Item saved successfully",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ],
+                                ).show();
+                              } else {
+                                setState(() {
+                                  isLoading = false;
+                                });
+
+                                print("failed");
+                                Alert(
+                                  style: AlertStyle(
+                                    animationType: AnimationType.fromTop,
+                                    isCloseButton: false,
+                                    isOverlayTapDismiss: false,
+                                    descStyle:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    animationDuration:
+                                        Duration(milliseconds: 400),
+                                    alertBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0.0),
+                                      side: BorderSide(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    titleStyle: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  context: context,
+                                  type: AlertType.error,
+                                  title: "Save Failed",
+                                  desc: "Check Again",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ],
+                                ).show();
+                              }
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.greenAccent,
+                              borderRadius: new BorderRadius.circular(25.0),
+                              border: Border.all(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 0.80),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 35.0, top: 10),
+                              child: Text("Save"),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
             ],
           ),
         ),

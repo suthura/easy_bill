@@ -29,6 +29,7 @@ dependencies:
   flutter_datetime_picker: ^1.3.4
   intl: 0.16.0
   shared_preferences:
+  rflutter_alert: ^1.0.2
 
 
 

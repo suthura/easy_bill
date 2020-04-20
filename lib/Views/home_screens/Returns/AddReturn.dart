@@ -6,6 +6,7 @@ import 'package:easy_bill/Controllers/API_Controllers/Stock/AddItemService.dart'
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AddReturnPage extends StatefulWidget {
@@ -21,32 +22,37 @@ clearContollers() {
   dateController.clear();
 }
 
+bool isLoading = false;
 final nameController = TextEditingController();
 final descriptionController = TextEditingController();
 final dateController = TextEditingController();
 
 class _AddReturnPageState extends State<AddReturnPage> {
   showDatePicker() {
-    DatePicker.showDatePicker(context,
-        showTitleActions: true,
-        minTime: DateTime(1980, 12, 31),
-        maxTime: DateTime.now(), onChanged: (date) {
-      //print the date
-      print('change $date');
-    }, onConfirm: (date) {
-      final bday = "$date";
+    DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      minTime: DateTime(1980, 12, 31),
+      maxTime: DateTime.now(),
+      onChanged: (date) {
+        //print the date
+        print('change $date');
+      },
+      onConfirm: (date) {
+        final bday = "$date";
 
-      var formatter = new DateFormat('yyyy-MM-dd');
-      var selecteddate = formatter.format(date);
+        var formatter = new DateFormat('yyyy-MM-dd');
+        var selecteddate = formatter.format(date);
 
-      setState(() {
-        dateController.text = selecteddate;
-        //eaqual the bday value to text editing controller
-      });
+        setState(() {
+          dateController.text = selecteddate;
+          //eaqual the bday value to text editing controller
+        });
 
-      //print the bday
-      print('confirm ' + selecteddate.toString());
-    }, );
+        //print the bday
+        print('confirm ' + selecteddate.toString());
+      },
+    );
   }
 
   @override
@@ -62,7 +68,7 @@ class _AddReturnPageState extends State<AddReturnPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-               Text(
+              Text(
                 "ADD RETURN",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
@@ -151,69 +157,153 @@ class _AddReturnPageState extends State<AddReturnPage> {
               SizedBox(
                 height: 30,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  InkWell(
-                    onTap: () {
-                      // Navigator.of(context).pop();
-                      clearContollers();
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.redAccent,
-                        borderRadius: new BorderRadius.circular(25.0),
-                        border: Border.all(
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
-                            width: 0.80),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0, top: 10),
-                        child: Text("Clear"),
-                      ),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () async {
-                      SharedPreferences login = await SharedPreferences.getInstance();
-                      final body = {
-                        "name": nameController.text,
-                        "description": descriptionController.text,
-                        "returnDate":dateController.text,
-                        "token": login.getString("gettoken")
-                      };
+              isLoading
+                  ? LinearProgressIndicator()
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        InkWell(
+                          onTap: () {
+                            // Navigator.of(context).pop();
+                            clearContollers();
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: new BorderRadius.circular(25.0),
+                              border: Border.all(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 0.80),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 35.0, top: 10),
+                              child: Text("Clear"),
+                            ),
+                          ),
+                        ),
+                        InkWell(
+                          onTap: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            SharedPreferences login =
+                                await SharedPreferences.getInstance();
+                            final body = {
+                              "name": nameController.text,
+                              "description": descriptionController.text,
+                              "returnDate": dateController.text,
+                              "token": login.getString("gettoken")
+                            };
 
-                      AddReturnService.addReturn(body).then((success) {
-                        if (success) {
-                          print("saved");
-                          clearContollers();
-                        } else {
-                          print("failed");
-                        }
-                      });
-                    },
-                    child: Container(
-                      height: 40,
-                      width: 100,
-                      decoration: BoxDecoration(
-                        color: Colors.greenAccent,
-                        borderRadius: new BorderRadius.circular(25.0),
-                        border: Border.all(
-                            color: Colors.grey,
-                            style: BorderStyle.solid,
-                            width: 0.80),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 35.0, top: 10),
-                        child: Text("Save"),
-                      ),
-                    ),
-                  ),
-                ],
-              )
+                            AddReturnService.addReturn(body).then((success) {
+                              if (success) {
+                                print("saved");
+                                clearContollers();
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Alert(
+                                  style: AlertStyle(
+                                    animationType: AnimationType.fromTop,
+                                    isCloseButton: false,
+                                    isOverlayTapDismiss: false,
+                                    descStyle:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    animationDuration:
+                                        Duration(milliseconds: 400),
+                                    alertBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0.0),
+                                      side: BorderSide(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    titleStyle: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  context: context,
+                                  type: AlertType.success,
+                                  title: "Save Success",
+                                  desc: "Your Record has been saved",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ],
+                                ).show();
+                              } else {
+                                print("failed");
+                                setState(() {
+                                  isLoading = false;
+                                });
+                                Alert(
+                                  style: AlertStyle(
+                                    animationType: AnimationType.fromTop,
+                                    isCloseButton: false,
+                                    isOverlayTapDismiss: false,
+                                    descStyle:
+                                        TextStyle(fontWeight: FontWeight.bold),
+                                    animationDuration:
+                                        Duration(milliseconds: 400),
+                                    alertBorder: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(0.0),
+                                      side: BorderSide(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    titleStyle: TextStyle(
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                  context: context,
+                                  type: AlertType.error,
+                                  title: "Save Failed",
+                                  desc: "Check Again",
+                                  buttons: [
+                                    DialogButton(
+                                      child: Text(
+                                        "OK",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 20),
+                                      ),
+                                      onPressed: () => Navigator.pop(context),
+                                      width: 120,
+                                    )
+                                  ],
+                                ).show();
+                              }
+                            });
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              color: Colors.greenAccent,
+                              borderRadius: new BorderRadius.circular(25.0),
+                              border: Border.all(
+                                  color: Colors.grey,
+                                  style: BorderStyle.solid,
+                                  width: 0.80),
+                            ),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 35.0, top: 10),
+                              child: Text("Save"),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
             ],
           ),
         ),

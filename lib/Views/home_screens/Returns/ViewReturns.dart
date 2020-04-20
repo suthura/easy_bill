@@ -11,6 +11,7 @@ import 'package:easy_bill/Views/home_screens/Common/FloatingButton.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class ViewReturnsPage extends StatefulWidget {
   ViewReturnsPage({Key key}) : super(key: key);
@@ -52,6 +53,8 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
     super.initState();
   }
 
+  bool isLoading = true;
+
   ReturnItem selectedItem;
 
   callAPI() {
@@ -60,6 +63,9 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
         returnItem = returnItemFromServer;
         filteredReturnItem = returnItem;
         print("Item list updated");
+        setState(() {
+          isLoading = false;
+        });
       });
     });
   }
@@ -77,7 +83,7 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-               Text(
+              Text(
                 "VIEW RETURNS",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
@@ -87,71 +93,171 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
               SizedBox(
                 height: 30,
               ),
-              Expanded(
-                child: ListView.separated(
-                    itemBuilder: (context, index) {
-                      // print(widget.filteredSaleItem.length);
-
-                      return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              isLoading
+                  ? Expanded(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                            width: MediaQuery.of(context).size.width * 3 / 5,
-                            child: Column(
-                              children: <Widget>[
-                                Row(
-                                  children: <Widget>[
-                                    Text(filteredReturnItem[index].name),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(filteredReturnItem[index].description),
-                                  ],
-                                ),
-                                Row(
-                                  children: <Widget>[
-                                    Text(
-                                      filteredReturnItem[index].returnDate,
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          Column(
-                            children: <Widget>[
-                              IconButton(
-                                  icon: Icon(Icons.delete),
-                                  onPressed: () {
-                                    final body = {
-                                      "returnID": filteredReturnItem[index].returnID
-                                    };
-                                    print(body);
-
-                                    RemoveReturnService.removeReturn(body)
-                                        .then((success) {
-                                      if (success) {
-                                        print("deleted");
-                                        callAPI();
-                                        // Navigator.of(context).pop();
-                                      } else {
-                                        print("failed");
-                                      }
-                                    });
-                                  })
-                            ],
-                          )
+                          LinearProgressIndicator(),
+                          Text("Loading Data...")
                         ],
-                      );
-                    },
-                    separatorBuilder: (context, index) {
-                      return Divider(height: 16);
-                    },
-                    itemCount: filteredReturnItem.length),
-              )
+                      ),
+                    )
+                  : Expanded(
+                      child: ListView.separated(
+                          itemBuilder: (context, index) {
+                            // print(widget.filteredSaleItem.length);
+
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 3 / 5,
+                                  child: Column(
+                                    children: <Widget>[
+                                      Row(
+                                        children: <Widget>[
+                                          Text(filteredReturnItem[index].name),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(filteredReturnItem[index]
+                                              .description),
+                                        ],
+                                      ),
+                                      Row(
+                                        children: <Widget>[
+                                          Text(
+                                            filteredReturnItem[index]
+                                                .returnDate,
+                                            style: TextStyle(color: Colors.red),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    IconButton(
+                                        icon: Icon(Icons.delete),
+                                        onPressed: () {
+                                          final body = {
+                                            "returnID":
+                                                filteredReturnItem[index]
+                                                    .returnID
+                                          };
+                                          print(body);
+
+                                          RemoveReturnService.removeReturn(body)
+                                              .then((success) {
+                                            if (success) {
+                                              print("deleted");
+                                              Alert(
+                                                style: AlertStyle(
+                                                  animationType:
+                                                      AnimationType.fromTop,
+                                                  isCloseButton: false,
+                                                  isOverlayTapDismiss: false,
+                                                  descStyle: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  animationDuration: Duration(
+                                                      milliseconds: 400),
+                                                  alertBorder:
+                                                      RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            0.0),
+                                                    side: BorderSide(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  titleStyle: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                context: context,
+                                                type: AlertType.success,
+                                                title: "Success",
+                                                desc: "Record Deleted",
+                                                buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "OK",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20),
+                                                    ),
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    width: 120,
+                                                  )
+                                                ],
+                                              ).show();
+                                              callAPI();
+                                              // Navigator.of(context).pop();
+                                            } else {
+                                              print("failed");
+                                              Alert(
+                                                style: AlertStyle(
+                                                  animationType:
+                                                      AnimationType.fromTop,
+                                                  isCloseButton: false,
+                                                  isOverlayTapDismiss: false,
+                                                  descStyle: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                  animationDuration: Duration(
+                                                      milliseconds: 400),
+                                                  alertBorder:
+                                                      RoundedRectangleBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            0.0),
+                                                    side: BorderSide(
+                                                      color: Colors.grey,
+                                                    ),
+                                                  ),
+                                                  titleStyle: TextStyle(
+                                                    color: Colors.red,
+                                                  ),
+                                                ),
+                                                context: context,
+                                                type: AlertType.error,
+                                                title: "Deletion Failed",
+                                                desc: "Check Again",
+                                                buttons: [
+                                                  DialogButton(
+                                                    child: Text(
+                                                      "OK",
+                                                      style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 20),
+                                                    ),
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    width: 120,
+                                                  )
+                                                ],
+                                              ).show();
+                                            }
+                                          });
+                                        })
+                                  ],
+                                )
+                              ],
+                            );
+                          },
+                          separatorBuilder: (context, index) {
+                            return Divider(height: 16);
+                          },
+                          itemCount: filteredReturnItem.length),
+                    )
             ],
           ),
         ),

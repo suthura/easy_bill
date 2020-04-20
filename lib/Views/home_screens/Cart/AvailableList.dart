@@ -12,6 +12,7 @@ import 'package:easy_bill/Modals/StockItem.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AvailableListPage extends StatefulWidget {
@@ -58,6 +59,10 @@ class _AvailableListPageState extends State<AvailableListPage> {
     super.initState();
   }
 
+  bool isLoading = true;
+
+  bool isbilling = false;
+
   ReturnItem selectedItem;
 
   callAPI() {
@@ -69,6 +74,11 @@ class _AvailableListPageState extends State<AvailableListPage> {
         _cartList.clear();
 
         _cartList = filteredStockItem;
+        setState(() {
+          total = 0.0;
+
+          isLoading = false;
+        });
       });
     });
   }
@@ -107,6 +117,9 @@ class _AvailableListPageState extends State<AvailableListPage> {
                     color: Colors.black,
                   ),
                   onPressed: () async {
+                    setState(() {
+                      isbilling = true;
+                    });
                     if (total > 0.0) {
                       List _cartIndexs = [];
                       double priceForItems = 0.0;
@@ -144,7 +157,8 @@ class _AvailableListPageState extends State<AvailableListPage> {
                         }
                       }
                       DateTime now = DateTime.now();
-                       SharedPreferences login = await SharedPreferences.getInstance();
+                      SharedPreferences login =
+                          await SharedPreferences.getInstance();
 
                       final salesList = {
                         "token": login.getString("gettoken"),
@@ -158,14 +172,125 @@ class _AvailableListPageState extends State<AvailableListPage> {
                           print("Sale Success");
                           callAPI();
                           // clearContollers();
+                          setState(() {
+                            isbilling = false;
+                          });
+                          Alert(
+                            style: AlertStyle(
+                              animationType: AnimationType.fromTop,
+                              isCloseButton: false,
+                              isOverlayTapDismiss: false,
+                              descStyle: TextStyle(fontWeight: FontWeight.bold),
+                              animationDuration: Duration(milliseconds: 400),
+                              alertBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                                side: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              titleStyle: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            context: context,
+                            type: AlertType.success,
+                            title: "Sale Success",
+                            desc: "Your sale has been recorded",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "OK",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
+                          ).show();
                         } else {
                           print("failed");
+                          setState(() {
+                            isbilling = false;
+                          });
+
+                          Alert(
+                            style: AlertStyle(
+                              animationType: AnimationType.fromTop,
+                              isCloseButton: false,
+                              isOverlayTapDismiss: false,
+                              descStyle: TextStyle(fontWeight: FontWeight.bold),
+                              animationDuration: Duration(milliseconds: 400),
+                              alertBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                                side: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              titleStyle: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            context: context,
+                            type: AlertType.error,
+                            title: "Sale Failed",
+                            desc: "Some Error Occured",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "OK",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
+                          ).show();
                         }
                       });
 
                       print(salesList);
                       // initState();
                     } else {
+                      Alert(
+                        style: AlertStyle(
+                          animationType: AnimationType.fromTop,
+                          isCloseButton: false,
+                          isOverlayTapDismiss: false,
+                          descStyle: TextStyle(fontWeight: FontWeight.bold),
+                          animationDuration: Duration(milliseconds: 400),
+                          alertBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(0.0),
+                            side: BorderSide(
+                              color: Colors.grey,
+                            ),
+                          ),
+                          titleStyle: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        context: context,
+                        type: AlertType.info,
+                        title: "No Items",
+                        desc: "Select at least one item",
+                        buttons: [
+                          DialogButton(
+                            child: Text(
+                              "OK",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 20),
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                isbilling = false;
+                              });
+                              Navigator.pop(context);
+                            },
+                            width: 120,
+                          )
+                        ],
+                      ).show();
                       print("no items in cart");
                     }
                   }),
@@ -180,7 +305,7 @@ class _AvailableListPageState extends State<AvailableListPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-               Text(
+              Text(
                 "NEW BILL",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
@@ -190,104 +315,142 @@ class _AvailableListPageState extends State<AvailableListPage> {
               SizedBox(
                 height: 30,
               ),
-              Expanded(
-                child: GridView.builder(
-                    padding: const EdgeInsets.all(4.0),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2),
-                    itemCount: filteredStockItem.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                          elevation: 4.0,
-                          child: Stack(
-                            fit: StackFit.loose,
-                            alignment: Alignment.center,
+              isLoading
+                  ? Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          LinearProgressIndicator(),
+                          Text("Loading Data...")
+                        ],
+                      ),
+                    )
+                  : isbilling
+                      ? Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
-                                  // Icon(Icons.add_comment),
-                                  Text(
-                                    filteredStockItem[index].name,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context).textTheme.subhead,
-                                  ),
-                                  Text(
-                                    filteredStockItem[index].description,
-                                    textAlign: TextAlign.center,
-                                    style: Theme.of(context).textTheme.subhead,
-                                  )
-                                ],
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                  right: 8.0,
-                                  bottom: 8.0,
-                                ),
-                                child: Align(
-                                  alignment: Alignment.bottomRight,
-                                  // child: GestureDetector(
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: <Widget>[
-                                      IconButton(
-                                        onPressed: () {
-                                          if (_cartList[index].cart > 0) {
-                                            setState(() {
-                                              _cartList[index].cart -= 1;
-                                              total -= double.parse(
-                                                  _cartList[index].price);
-
-                                              print(_cartList[index]
-                                                  .cart
-                                                  .toString());
-                                            });
-                                          }
-                                        },
-                                        icon: Icon(Icons.remove_circle),
-                                        color: Colors.red,
-                                      ),
-                                      Text(_cartList[index].cart.toString()),
-                                      IconButton(
-                                        onPressed: () {
-                                          if (_cartList[index].cart <
-                                              filteredStockItem[index].stock) {
-                                            setState(() {
-                                              _cartList[index].cart += 1;
-                                              total += double.parse(
-                                                  _cartList[index].price);
-                                              print(_cartList[index]
-                                                  .cart
-                                                  .toString());
-                                            });
-                                          } else {
-                                            print("limit exceededd");
-                                          }
-                                        },
-                                        icon: Icon(Icons.add_circle),
-                                        color: Colors.green,
-                                      )
-                                    ],
-                                  ),
-                                  // onTap: () {
-                                  // setState(() {
-                                  //   if (_cartList
-                                  //       .contains(filteredStockItem[index]))
-                                  //     _cartList
-                                  //         .remove(filteredStockItem[index]);
-                                  //   else
-                                  //     _cartList
-                                  //         .add(filteredStockItem[index]);
-                                  // });
-                                  // },
-                                  // ),
-                                ),
-                              ),
+                              CircularProgressIndicator(),
+                              Text("Processing Bill...")
                             ],
-                          ));
-                    }),
-              )
+                          ),
+                        )
+                      : Expanded(
+                          child: GridView.builder(
+                              padding: const EdgeInsets.all(4.0),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2),
+                              itemCount: filteredStockItem.length,
+                              itemBuilder: (context, index) {
+                                return Card(
+                                    elevation: 4.0,
+                                    child: Stack(
+                                      fit: StackFit.loose,
+                                      alignment: Alignment.center,
+                                      children: <Widget>[
+                                        Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            // Icon(Icons.add_comment),
+                                            Text(
+                                              filteredStockItem[index].name,
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subhead,
+                                            ),
+                                            Text(
+                                              filteredStockItem[index]
+                                                  .description,
+                                              textAlign: TextAlign.center,
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .subhead,
+                                            )
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            right: 8.0,
+                                            bottom: 8.0,
+                                          ),
+                                          child: Align(
+                                            alignment: Alignment.bottomRight,
+                                            // child: GestureDetector(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: <Widget>[
+                                                IconButton(
+                                                  onPressed: () {
+                                                    if (_cartList[index].cart >
+                                                        0) {
+                                                      setState(() {
+                                                        _cartList[index].cart -=
+                                                            1;
+                                                        total -= double.parse(
+                                                            _cartList[index]
+                                                                .price);
+
+                                                        print(_cartList[index]
+                                                            .cart
+                                                            .toString());
+                                                      });
+                                                    }
+                                                  },
+                                                  icon:
+                                                      Icon(Icons.remove_circle),
+                                                  color: Colors.red,
+                                                ),
+                                                Text(_cartList[index]
+                                                    .cart
+                                                    .toString()),
+                                                IconButton(
+                                                  onPressed: () {
+                                                    if (_cartList[index].cart <
+                                                        filteredStockItem[index]
+                                                            .stock) {
+                                                      setState(() {
+                                                        _cartList[index].cart +=
+                                                            1;
+                                                        total += double.parse(
+                                                            _cartList[index]
+                                                                .price);
+                                                        print(_cartList[index]
+                                                            .cart
+                                                            .toString());
+                                                      });
+                                                    } else {
+                                                      print("limit exceededd");
+                                                    }
+                                                  },
+                                                  icon: Icon(Icons.add_circle),
+                                                  color: Colors.green,
+                                                )
+                                              ],
+                                            ),
+                                            // onTap: () {
+                                            // setState(() {
+                                            //   if (_cartList
+                                            //       .contains(filteredStockItem[index]))
+                                            //     _cartList
+                                            //         .remove(filteredStockItem[index]);
+                                            //   else
+                                            //     _cartList
+                                            //         .add(filteredStockItem[index]);
+                                            // });
+                                            // },
+                                            // ),
+                                          ),
+                                        ),
+                                      ],
+                                    ));
+                              }),
+                        )
             ],
           ),
         ),

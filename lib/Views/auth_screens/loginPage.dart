@@ -3,6 +3,7 @@ import 'package:easy_bill/Views/auth_screens/signup.dart';
 import 'package:easy_bill/Views/home_screens/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 import 'Widget/bezierContainer.dart';
 
@@ -14,6 +15,8 @@ class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
 }
+
+bool isLoading = false;
 
 class _LoginPageState extends State<LoginPage> {
   final emailController = TextEditingController();
@@ -46,49 +49,95 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Widget _submitButton() {
-    return InkWell(
-      onTap: () {
-        final body = {
-          "email": emailController.text.trim(),
-          "password": passwordController.text.trim(),
-        };
+    return isLoading
+        ? CircularProgressIndicator(
+            // backgroundColor: Colors.white,
+          )
+        : InkWell(
+            onTap: () {
+              setState(() {
+                isLoading = true;
+              });
+              final body = {
+                "email": emailController.text.trim(),
+                "password": passwordController.text.trim(),
+              };
 
-        // print(body);
+              // print(body);
 
-        LoginService.login(body).then((success) {
-          if (success) {
-            print("login Success");
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => HomePage()),
-                (Route<dynamic> route) => false);
-          } else {
-            print("failed");
-          }
-        });
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ],
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: Text(
-          'Login',
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-      ),
-    );
+              LoginService.login(body).then((success) {
+                if (success) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print("login Success");
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false);
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print("failed");
+                   Alert(
+                            style: AlertStyle(
+                              animationType: AnimationType.fromTop,
+                              isCloseButton: false,
+                              isOverlayTapDismiss: false,
+                              descStyle: TextStyle(fontWeight: FontWeight.bold),
+                              animationDuration: Duration(milliseconds: 400),
+                              alertBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                                side: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              titleStyle: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            context: context,
+                            type: AlertType.error,
+                            title: "Login Failed",
+                            desc: "Check Again",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "OK",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
+                          ).show();
+                }
+              });
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(vertical: 15),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.grey.shade200,
+                        offset: Offset(2, 4),
+                        blurRadius: 5,
+                        spreadRadius: 2)
+                  ],
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+              child: Text(
+                'Login',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+          );
   }
 
   Widget _createAccountLabel() {

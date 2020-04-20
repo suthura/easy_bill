@@ -56,6 +56,7 @@ class _ViewWeeklylSalesPageState extends State<ViewWeeklylSalesPage> {
   }
 
   SaleItem selectedItem;
+  bool isLoading = true;
 
   callAPI() {
     GetWeeklySalesService.getSales().then((saleItemFromServer) {
@@ -63,6 +64,9 @@ class _ViewWeeklylSalesPageState extends State<ViewWeeklylSalesPage> {
         saleItem = saleItemFromServer;
         filteredSaleItem = saleItem;
         print("Item list updated");
+        setState(() {
+          isLoading=false;
+        });
       });
     });
   }
@@ -90,6 +94,18 @@ class _ViewWeeklylSalesPageState extends State<ViewWeeklylSalesPage> {
               SizedBox(
                 height: 30,
               ),
+              isLoading
+                  ? Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          LinearProgressIndicator(),
+                          Text("Loading Data...")
+                        ],
+                      ),
+                    )
+                  :
               Expanded(
                 child: ListView.separated(
                     shrinkWrap: true,

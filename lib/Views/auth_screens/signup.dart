@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/auth_screens/Widget/bezierContainer.dart';
 import 'package:easy_bill/Views/auth_screens/loginPage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class SignUpPage extends StatefulWidget {
   SignUpPage({Key key, this.title}) : super(key: key);
@@ -14,6 +15,8 @@ class SignUpPage extends StatefulWidget {
   _SignUpPageState createState() => _SignUpPageState();
 }
 
+bool isLoading = false;
+
 class _SignUpPageState extends State<SignUpPage> {
   final fnameController = TextEditingController();
   final lnameController = TextEditingController();
@@ -22,53 +25,100 @@ class _SignUpPageState extends State<SignUpPage> {
   final passwordController = TextEditingController();
 
   Widget _submitButton() {
-    return InkWell(
-      onTap: () {
-        final body = {
-          "firstname": fnameController.text,
-          "lastname": lnameController.text,
-          "email": emailController.text,
-          "phone": phoneController.text,
-          "password": passwordController.text,
-          "usertype": "user"
-        };
+    return isLoading
+        ? CircularProgressIndicator(
+            // backgroundColor: Colors.white,
+            )
+        : InkWell(
+            onTap: () {
+              setState(() {
+                isLoading = true;
+              });
 
-        // print(body);
+              final body = {
+                "firstname": fnameController.text,
+                "lastname": lnameController.text,
+                "email": emailController.text,
+                "phone": phoneController.text,
+                "password": passwordController.text,
+                "usertype": "user"
+              };
 
-        RegisterService.signup(body).then((success) {
-          if (success) {
-            print("signup Success");
-            Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => HomePage()),
-                (Route<dynamic> route) => false);
-          } else {
-            print("failed");
-          }
-        });
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 15),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ],
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: Text(
-          'Register Now',
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-      ),
-    );
+              // print(body);
+
+              RegisterService.signup(body).then((success) {
+                if (success) {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print("signup Success");
+                  Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                      (Route<dynamic> route) => false);
+                } else {
+                  setState(() {
+                    isLoading = false;
+                  });
+                  print("failed");
+                   Alert(
+                            style: AlertStyle(
+                              animationType: AnimationType.fromTop,
+                              isCloseButton: false,
+                              isOverlayTapDismiss: false,
+                              descStyle: TextStyle(fontWeight: FontWeight.bold),
+                              animationDuration: Duration(milliseconds: 400),
+                              alertBorder: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(0.0),
+                                side: BorderSide(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                              titleStyle: TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                            context: context,
+                            type: AlertType.error,
+                            title: "Registration Failed",
+                            desc: "Check Again",
+                            buttons: [
+                              DialogButton(
+                                child: Text(
+                                  "OK",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20),
+                                ),
+                                onPressed: () => Navigator.pop(context),
+                                width: 120,
+                              )
+                            ],
+                          ).show();
+                }
+              });
+            },
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(vertical: 15),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                        color: Colors.grey.shade200,
+                        offset: Offset(2, 4),
+                        blurRadius: 5,
+                        spreadRadius: 2)
+                  ],
+                  gradient: LinearGradient(
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                      colors: [Color(0xfffbb448), Color(0xfff7892b)])),
+              child: Text(
+                'Register Now',
+                style: TextStyle(fontSize: 20, color: Colors.white),
+              ),
+            ),
+          );
   }
 
   Widget _loginAccountLabel() {
