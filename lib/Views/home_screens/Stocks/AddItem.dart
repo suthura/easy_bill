@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_bill/Views/home_screens/Common/AppBar.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/AddItemService.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddItemPage extends StatefulWidget {
   AddItemPage({Key key}) : super(key: key);
@@ -147,14 +148,14 @@ class _AddItemPageState extends State<AddItemPage> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      SharedPreferences login = await SharedPreferences.getInstance();
                       final body = {
                         "name": nameController.text,
                         "price": priceController.text,
                         "description": descriptionController.text,
                         "stock": stockController.text,
-                        "token":
-                            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTkzMWU0NjYxYzVjMDAwMTcwYmNkYzUiLCJpYXQiOjE1ODY4NjU5MDB9.5rMJBsgdlMQZVqoFPU3iCHoLm44gn7v_HPPDc90F1DA"
+                        "token": login.getString("gettoken")
                       };
 
                       AddItemService.addItem(body).then((success) {

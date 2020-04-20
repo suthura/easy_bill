@@ -6,6 +6,7 @@ import 'package:easy_bill/Controllers/API_Controllers/Stock/AddItemService.dart'
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class AddReturnPage extends StatefulWidget {
   AddReturnPage({Key key}) : super(key: key);
@@ -176,13 +177,13 @@ class _AddReturnPageState extends State<AddReturnPage> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {
+                    onTap: () async {
+                      SharedPreferences login = await SharedPreferences.getInstance();
                       final body = {
                         "name": nameController.text,
                         "description": descriptionController.text,
                         "returnDate":dateController.text,
-                        "token":
-                            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZTkzMWU0NjYxYzVjMDAwMTcwYmNkYzUiLCJpYXQiOjE1ODY4NjU5MDB9.5rMJBsgdlMQZVqoFPU3iCHoLm44gn7v_HPPDc90F1DA"
+                        "token": login.getString("gettoken")
                       };
 
                       AddReturnService.addReturn(body).then((success) {

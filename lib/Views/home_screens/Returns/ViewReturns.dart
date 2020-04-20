@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_bill/Controllers/API_Controllers/Returns/GetMyReturnsService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Returns/RemoveReturnService.dart';
 import 'package:easy_bill/Controllers/API_Controllers/Stock/GetMyStockService.dart';
@@ -16,6 +18,27 @@ class ViewReturnsPage extends StatefulWidget {
   @override
   _ViewReturnsPageState createState() => _ViewReturnsPageState();
 }
+
+//SerachBar Related content---//////////////////////////////////////////////////////////////////////
+class Debouncer {
+  final int milliseconds;
+  VoidCallback action;
+  Timer _timer;
+
+  Debouncer({this.milliseconds});
+
+  run(VoidCallback action) {
+    if (null != _timer) {
+      _timer.cancel();
+    }
+    _timer = Timer(Duration(milliseconds: milliseconds), action);
+  }
+}
+
+final _debouncer = Debouncer(milliseconds: 500);
+final _search = TextEditingController();
+bool isSearchFocused = false;
+//SerachBar Related content---//////////////////////////////////////////////////////////////////////
 
 List<ReturnItem> returnItem = List();
 List<ReturnItem> filteredReturnItem = List();
@@ -58,6 +81,9 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
                 "VIEW RETURNS",
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
               ),
+              //SerachBar Related content---//////////////////////////////////////////////////////////////////////
+              _buildSearchBar(context),
+              //SerachBar Related content---//////////////////////////////////////////////////////////////////////
               SizedBox(
                 height: 30,
               ),
@@ -132,4 +158,48 @@ class _ViewReturnsPageState extends State<ViewReturnsPage> {
       ),
     );
   }
+
+  //SerachBar Related content---//////////////////////////////////////////////////////////////////////
+  Widget _buildSearchBar(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(top: 30.0),
+      width: MediaQuery.of(context).size.width / 1.2,
+      height: 45,
+      // margin: EdgeInsets.only(top: 32),
+      padding: EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 2),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(50)),
+          color: Colors.white,
+          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
+      child: TextField(
+        keyboardType: TextInputType.text,
+        // controller: _search,
+        onTap: () {
+          setState(() {
+            isSearchFocused = true;
+          });
+        },
+        onChanged: (string) {
+          _debouncer.run(() {
+            setState(() {
+              filteredReturnItem = returnItem
+                  .where((u) =>
+                      (u.name.toLowerCase().contains(string.toLowerCase())))
+                  .toList();
+            });
+          });
+        },
+        decoration: InputDecoration(
+          border: InputBorder.none,
+          prefixIcon: Icon(
+            Icons.search,
+            color: Colors.grey,
+            size: 30,
+          ),
+          hintText: 'search',
+        ),
+      ),
+    );
+  }
+  //SerachBar Related content---//////////////////////////////////////////////////////////////////////
 }
