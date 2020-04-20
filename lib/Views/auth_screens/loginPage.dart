@@ -25,6 +25,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget _entryField(TextEditingController txtctrl, String title,
       {bool isPassword = false}) {
     return Container(
+      constraints: BoxConstraints(maxWidth: 350),
       margin: EdgeInsets.symmetric(vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -52,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
     return isLoading
         ? CircularProgressIndicator(
             // backgroundColor: Colors.white,
-          )
+            )
         : InkWell(
             onTap: () {
               setState(() {
@@ -79,43 +80,43 @@ class _LoginPageState extends State<LoginPage> {
                     isLoading = false;
                   });
                   print("failed");
-                   Alert(
-                            style: AlertStyle(
-                              animationType: AnimationType.fromTop,
-                              isCloseButton: false,
-                              isOverlayTapDismiss: false,
-                              descStyle: TextStyle(fontWeight: FontWeight.bold),
-                              animationDuration: Duration(milliseconds: 400),
-                              alertBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(0.0),
-                                side: BorderSide(
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              titleStyle: TextStyle(
-                                color: Colors.red,
-                              ),
-                            ),
-                            context: context,
-                            type: AlertType.error,
-                            title: "Login Failed",
-                            desc: "Check Again",
-                            buttons: [
-                              DialogButton(
-                                child: Text(
-                                  "OK",
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 20),
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                                width: 120,
-                              )
-                            ],
-                          ).show();
+                  Alert(
+                    style: AlertStyle(
+                      animationType: AnimationType.fromTop,
+                      isCloseButton: false,
+                      isOverlayTapDismiss: false,
+                      descStyle: TextStyle(fontWeight: FontWeight.bold),
+                      animationDuration: Duration(milliseconds: 400),
+                      alertBorder: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(0.0),
+                        side: BorderSide(
+                          color: Colors.grey,
+                        ),
+                      ),
+                      titleStyle: TextStyle(
+                        color: Colors.red,
+                      ),
+                    ),
+                    context: context,
+                    type: AlertType.error,
+                    title: "Login Failed",
+                    desc: "Check Again",
+                    buttons: [
+                      DialogButton(
+                        child: Text(
+                          "OK",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        onPressed: () => Navigator.pop(context),
+                        width: 120,
+                      )
+                    ],
+                  ).show();
                 }
               });
             },
             child: Container(
+              constraints: BoxConstraints(maxWidth: 350),
               width: MediaQuery.of(context).size.width,
               padding: EdgeInsets.symmetric(vertical: 15),
               alignment: Alignment.center,
@@ -176,7 +177,7 @@ class _LoginPageState extends State<LoginPage> {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
-          text: 'd',
+          text: 'EAS',
           style: GoogleFonts.portLligatSans(
             textStyle: Theme.of(context).textTheme.display1,
             fontSize: 30,
@@ -185,11 +186,11 @@ class _LoginPageState extends State<LoginPage> {
           ),
           children: [
             TextSpan(
-              text: 'ev',
+              text: 'YB',
               style: TextStyle(color: Colors.black, fontSize: 30),
             ),
             TextSpan(
-              text: 'rnz',
+              text: 'ILL',
               style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
             ),
           ]),

@@ -85,6 +85,19 @@ class _AvailableListPageState extends State<AvailableListPage> {
 
   @override
   Widget build(BuildContext context) {
+    getcount() {
+      int colcount = 2;
+      var dispwidth = MediaQuery.of(context).size.width;
+      // print ( dispwidth);
+      dispwidth > 1000
+          ? colcount = 6
+          : dispwidth > 500
+              ? colcount = 4
+              : dispwidth > 300 ? colcount = 3 : colcount = 2;
+
+      return colcount;
+    }
+
     return Scaffold(
       appBar: appBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
@@ -342,9 +355,10 @@ class _AvailableListPageState extends State<AvailableListPage> {
                               padding: const EdgeInsets.all(4.0),
                               gridDelegate:
                                   SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2),
+                                      crossAxisCount: getcount()),
                               itemCount: filteredStockItem.length,
                               itemBuilder: (context, index) {
+                                // getcount();
                                 return Card(
                                     elevation: 4.0,
                                     child: Stack(

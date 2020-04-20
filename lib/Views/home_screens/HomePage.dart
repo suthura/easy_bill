@@ -24,176 +24,179 @@ class _HomePageState extends State<HomePage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: floatingButton(context),
       appBar: appBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text("HOME",style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w500
-            ),),
-            SizedBox(
-              height: 10,
-            ),
-            _buildCard(
-              "Stocks",
-              'assets/images/stock.png',
-              PopupMenuButton<int>(
-                  icon: Icon(FontAwesomeIcons.chevronCircleDown),
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("add item");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AddItemPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.add_circle,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("Add Items")
-                            ],
-                          ),
-                        )),
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("view item");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewItemPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.assignment,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("View Items")
-                            ],
-                          ),
-                        ))
-                      ]),
-            ),
-            _buildCard(
-              "Sales",
-              'assets/images/cart.png',
-              PopupMenuButton<int>(
-                  icon: Icon(FontAwesomeIcons.chevronCircleDown),
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("view all sales");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewAllSalesPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                FontAwesomeIcons.solidArrowAltCircleRight,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("View Sales")
-                            ],
-                          ),
-                        )),
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("view week sales");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewWeeklylSalesPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                FontAwesomeIcons.solidArrowAltCircleRight,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("View Last Week Sales")
-                            ],
-                          ),
-                        )),
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("view month sales");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewMonthlylSalesPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                FontAwesomeIcons.solidArrowAltCircleRight,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("View Last Month Sales")
-                            ],
-                          ),
-                        )),
-                      ]),
-            ),
-            _buildCard(
-              "Returns",
-              'assets/images/return.png',
-              PopupMenuButton<int>(
-                  icon: Icon(FontAwesomeIcons.chevronCircleDown),
-                  itemBuilder: (context) => [
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("add return");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => AddReturnPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.add_circle,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("Add Return")
-                            ],
-                          ),
-                        )),
-                        PopupMenuItem(
-                            child: InkWell(
-                          onTap: () {
-                            print("view return");
-                            Navigator.of(context).push(MaterialPageRoute(
-                                builder: (context) => ViewReturnsPage()));
-                          },
-                          child: Row(
-                            children: <Widget>[
-                              Icon(
-                                Icons.assignment,
-                              ),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text("View Returns")
-                            ],
-                          ),
-                        ))
-                      ]),
-            ),
-          ],
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                "HOME",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              _buildCard(
+                "Stocks",
+                'assets/images/stock.png',
+                PopupMenuButton<int>(
+                    icon: Icon(FontAwesomeIcons.chevronCircleDown),
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("add item");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AddItemPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add_circle,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("Add Items")
+                              ],
+                            ),
+                          )),
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("view item");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewItemPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.assignment,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("View Items")
+                              ],
+                            ),
+                          ))
+                        ]),
+              ),
+              _buildCard(
+                "Sales",
+                'assets/images/cart.png',
+                PopupMenuButton<int>(
+                    icon: Icon(FontAwesomeIcons.chevronCircleDown),
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("view all sales");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewAllSalesPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  FontAwesomeIcons.solidArrowAltCircleRight,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("View Sales")
+                              ],
+                            ),
+                          )),
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("view week sales");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewWeeklylSalesPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  FontAwesomeIcons.solidArrowAltCircleRight,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("View Last Week Sales")
+                              ],
+                            ),
+                          )),
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("view month sales");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewMonthlylSalesPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  FontAwesomeIcons.solidArrowAltCircleRight,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("View Last Month Sales")
+                              ],
+                            ),
+                          )),
+                        ]),
+              ),
+              _buildCard(
+                "Returns",
+                'assets/images/return.png',
+                PopupMenuButton<int>(
+                    icon: Icon(FontAwesomeIcons.chevronCircleDown),
+                    itemBuilder: (context) => [
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("add return");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AddReturnPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add_circle,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("Add Return")
+                              ],
+                            ),
+                          )),
+                          PopupMenuItem(
+                              child: InkWell(
+                            onTap: () {
+                              print("view return");
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => ViewReturnsPage()));
+                            },
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.assignment,
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text("View Returns")
+                              ],
+                            ),
+                          ))
+                        ]),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -212,6 +215,7 @@ final subHeaderTextStyle = regularTextStyle.copyWith(fontSize: 12.0);
 
 Widget _buildCard(cardName, imagePath, Widget dropDownData) {
   return new Container(
+      constraints: BoxConstraints(maxWidth: 500),
       height: 170.0,
       margin: const EdgeInsets.symmetric(
         vertical: 0.0,

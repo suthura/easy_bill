@@ -38,245 +38,269 @@ class _AddItemPageState extends State<AddItemPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(left: 15.0, right: 15),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                "ADD ITEM",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
-              ),
-              SizedBox(
-                height: 30,
-              ),
-              TextFormField(
-                controller: nameController,
-                decoration: new InputDecoration(
-                  labelText: "Item Name",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  "ADD ITEM",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 500),
+                  child: TextFormField(
+                    controller: nameController,
+                    decoration: new InputDecoration(
+                      labelText: "Item Name",
+                      fillColor: Colors.white,
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      //fillColor: Colors.green
+                    ),
+                    keyboardType: TextInputType.text,
+                    style: new TextStyle(
+                      fontFamily: "Poppins",
+                    ),
                   ),
-                  //fillColor: Colors.green
                 ),
-                keyboardType: TextInputType.text,
-                style: new TextStyle(
-                  fontFamily: "Poppins",
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: priceController,
-                decoration: new InputDecoration(
-                  labelText: "Item Price",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 500),
+                  child: TextFormField(
+                    controller: priceController,
+                    decoration: new InputDecoration(
+                      labelText: "Item Price",
+                      fillColor: Colors.white,
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      //fillColor: Colors.green
+                    ),
+                    keyboardType: TextInputType.numberWithOptions(
+                        decimal: true, signed: false),
+                    style: new TextStyle(
+                      fontFamily: "Poppins",
+                    ),
                   ),
-                  //fillColor: Colors.green
                 ),
-                keyboardType: TextInputType.numberWithOptions(
-                    decimal: true, signed: false),
-                style: new TextStyle(
-                  fontFamily: "Poppins",
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: descriptionController,
-                decoration: new InputDecoration(
-                  labelText: "Item Description",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 500),
+                  child: TextFormField(
+                    controller: descriptionController,
+                    decoration: new InputDecoration(
+                      labelText: "Item Description",
+                      fillColor: Colors.white,
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      //fillColor: Colors.green
+                    ),
+                    keyboardType: TextInputType.text,
+                    style: new TextStyle(
+                      fontFamily: "Poppins",
+                    ),
                   ),
-                  //fillColor: Colors.green
                 ),
-                keyboardType: TextInputType.text,
-                style: new TextStyle(
-                  fontFamily: "Poppins",
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              TextFormField(
-                controller: stockController,
-                decoration: new InputDecoration(
-                  labelText: "Initial Stock",
-                  fillColor: Colors.white,
-                  border: new OutlineInputBorder(
-                    borderRadius: new BorderRadius.circular(25.0),
-                    borderSide: new BorderSide(),
+                Container(
+                  constraints: BoxConstraints(maxWidth: 500),
+                  child: TextFormField(
+                    controller: stockController,
+                    decoration: new InputDecoration(
+                      labelText: "Initial Stock",
+                      fillColor: Colors.white,
+                      border: new OutlineInputBorder(
+                        borderRadius: new BorderRadius.circular(25.0),
+                        borderSide: new BorderSide(),
+                      ),
+                      //fillColor: Colors.green
+                    ),
+                    keyboardType: TextInputType.text,
+                    style: new TextStyle(
+                      fontFamily: "Poppins",
+                    ),
                   ),
-                  //fillColor: Colors.green
                 ),
-                keyboardType: TextInputType.text,
-                style: new TextStyle(
-                  fontFamily: "Poppins",
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              isLoading
-                  ? LinearProgressIndicator()
-                  : Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        InkWell(
-                          onTap: () {
-                            // Navigator.of(context).pop();
-                            clearContollers();
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius: new BorderRadius.circular(25.0),
-                              border: Border.all(
-                                  color: Colors.grey,
-                                  style: BorderStyle.solid,
-                                  width: 0.80),
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 35.0, top: 10),
-                              child: Text("Clear"),
-                            ),
-                          ),
-                        ),
-                        InkWell(
-                          onTap: () async {
-                            setState(() {
-                              isLoading = true;
-                            });
-
-                            SharedPreferences login =
-                                await SharedPreferences.getInstance();
-                            final body = {
-                              "name": nameController.text,
-                              "price": priceController.text,
-                              "description": descriptionController.text,
-                              "stock": stockController.text,
-                              "token": login.getString("gettoken")
-                            };
-
-                            AddItemService.addItem(body).then((success) {
-                              if (success) {
-                                print("saved");
+                isLoading
+                    ? LinearProgressIndicator()
+                    : Container(
+                        constraints: BoxConstraints(maxWidth: 500),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            InkWell(
+                              onTap: () {
+                                // Navigator.of(context).pop();
                                 clearContollers();
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.redAccent,
+                                  borderRadius: new BorderRadius.circular(25.0),
+                                  border: Border.all(
+                                      color: Colors.grey,
+                                      style: BorderStyle.solid,
+                                      width: 0.80),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 35.0, top: 10),
+                                  child: Text("Clear"),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () async {
                                 setState(() {
-                                  isLoading = false;
-                                });
-                                Alert(
-                                  style: AlertStyle(
-                                    animationType: AnimationType.fromTop,
-                                    isCloseButton: false,
-                                    isOverlayTapDismiss: false,
-                                    descStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    animationDuration:
-                                        Duration(milliseconds: 400),
-                                    alertBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(0.0),
-                                      side: BorderSide(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    titleStyle: TextStyle(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  context: context,
-                                  type: AlertType.success,
-                                  title: "Item Added",
-                                  desc: "Item saved successfully",
-                                  buttons: [
-                                    DialogButton(
-                                      child: Text(
-                                        "OK",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
-                                      ),
-                                      onPressed: () => Navigator.pop(context),
-                                      width: 120,
-                                    )
-                                  ],
-                                ).show();
-                              } else {
-                                setState(() {
-                                  isLoading = false;
+                                  isLoading = true;
                                 });
 
-                                print("failed");
-                                Alert(
-                                  style: AlertStyle(
-                                    animationType: AnimationType.fromTop,
-                                    isCloseButton: false,
-                                    isOverlayTapDismiss: false,
-                                    descStyle:
-                                        TextStyle(fontWeight: FontWeight.bold),
-                                    animationDuration:
-                                        Duration(milliseconds: 400),
-                                    alertBorder: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(0.0),
-                                      side: BorderSide(
-                                        color: Colors.grey,
+                                SharedPreferences login =
+                                    await SharedPreferences.getInstance();
+                                final body = {
+                                  "name": nameController.text,
+                                  "price": priceController.text,
+                                  "description": descriptionController.text,
+                                  "stock": stockController.text,
+                                  "token": login.getString("gettoken")
+                                };
+
+                                AddItemService.addItem(body).then((success) {
+                                  if (success) {
+                                    print("saved");
+                                    clearContollers();
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+                                    Alert(
+                                      style: AlertStyle(
+                                        animationType: AnimationType.fromTop,
+                                        isCloseButton: false,
+                                        isOverlayTapDismiss: false,
+                                        descStyle: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        animationDuration:
+                                            Duration(milliseconds: 400),
+                                        alertBorder: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0),
+                                          side: BorderSide(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        titleStyle: TextStyle(
+                                          color: Colors.red,
+                                        ),
                                       ),
-                                    ),
-                                    titleStyle: TextStyle(
-                                      color: Colors.red,
-                                    ),
-                                  ),
-                                  context: context,
-                                  type: AlertType.error,
-                                  title: "Save Failed",
-                                  desc: "Check Again",
-                                  buttons: [
-                                    DialogButton(
-                                      child: Text(
-                                        "OK",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
+                                      context: context,
+                                      type: AlertType.success,
+                                      title: "Item Added",
+                                      desc: "Item saved successfully",
+                                      buttons: [
+                                        DialogButton(
+                                          child: Text(
+                                            "OK",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          width: 120,
+                                        )
+                                      ],
+                                    ).show();
+                                  } else {
+                                    setState(() {
+                                      isLoading = false;
+                                    });
+
+                                    print("failed");
+                                    Alert(
+                                      style: AlertStyle(
+                                        animationType: AnimationType.fromTop,
+                                        isCloseButton: false,
+                                        isOverlayTapDismiss: false,
+                                        descStyle: TextStyle(
+                                            fontWeight: FontWeight.bold),
+                                        animationDuration:
+                                            Duration(milliseconds: 400),
+                                        alertBorder: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(0.0),
+                                          side: BorderSide(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        titleStyle: TextStyle(
+                                          color: Colors.red,
+                                        ),
                                       ),
-                                      onPressed: () => Navigator.pop(context),
-                                      width: 120,
-                                    )
-                                  ],
-                                ).show();
-                              }
-                            });
-                          },
-                          child: Container(
-                            height: 40,
-                            width: 100,
-                            decoration: BoxDecoration(
-                              color: Colors.greenAccent,
-                              borderRadius: new BorderRadius.circular(25.0),
-                              border: Border.all(
-                                  color: Colors.grey,
-                                  style: BorderStyle.solid,
-                                  width: 0.80),
+                                      context: context,
+                                      type: AlertType.error,
+                                      title: "Save Failed",
+                                      desc: "Check Again",
+                                      buttons: [
+                                        DialogButton(
+                                          child: Text(
+                                            "OK",
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20),
+                                          ),
+                                          onPressed: () =>
+                                              Navigator.pop(context),
+                                          width: 120,
+                                        )
+                                      ],
+                                    ).show();
+                                  }
+                                });
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  color: Colors.greenAccent,
+                                  borderRadius: new BorderRadius.circular(25.0),
+                                  border: Border.all(
+                                      color: Colors.grey,
+                                      style: BorderStyle.solid,
+                                      width: 0.80),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 35.0, top: 10),
+                                  child: Text("Save"),
+                                ),
+                              ),
                             ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 35.0, top: 10),
-                              child: Text("Save"),
-                            ),
-                          ),
+                          ],
                         ),
-                      ],
-                    )
-            ],
+                      )
+              ],
+            ),
           ),
         ),
       ),
